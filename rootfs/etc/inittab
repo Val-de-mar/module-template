@@ -1,0 +1,8 @@
+::sysinit:/bin/busybox --install -s /bin
+::sysinit:/bin/busybox mount -t proc proc /proc
+::sysinit:/bin/busybox mount -t sysfs sysfs /sys
+::askfirst:/bin/busybox sh
+::shutdown:/bin/swapoff -a
+::shutdown:/bin/umount -a -r
+::restart:/sbin/init
+

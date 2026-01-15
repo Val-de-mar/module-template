@@ -13,6 +13,13 @@ linux/.config:
 	./scripts/config --enable CONFIG_BLK_DEV_INITRD && \
 	./scripts/config --enable CONFIG_BINFMT_ELF && \
 	./scripts/config --enable CONFIG_DEVTMPFS && \
+	./scripts/config --enable CONFIG_TTY && \
+	./scripts/config --enable CONFIG_VT && \
+	./scripts/config --enable CONFIG_VT_CONSOLE && \
+	./scripts/config --enable CONFIG_SERIAL_8250 && \
+	./scripts/config --enable CONFIG_SERIAL_8250_CONSOLE && \
+	./scripts/config --enable CONFIG_DEVTMPFS && \
+	./scripts/config --enable CONFIG_DEVTMPFS_MOUNT && \
 	$(MAKE) $(VARS) olddefconfig
 
 $(KERNEL):
@@ -21,10 +28,11 @@ $(KERNEL):
 module/hello.ko:
 	$(MAKE) $(VARS) -C module
 
+MODULE := hello.ko
+ROOTFS_MODULE_PREFIX := rootfs/modules
 
-ROOTFS_MODULE := rootfs/modules/hello.ko
-
-$(ROOTFS_MODULE): module/hello.ko
+ROOTFS_MODULE := "$(ROOTFS_MODULE_PREFIX)/$(MODULE)"
+$(ROOTFS_MODULE): module/$(MODULE)
 	mkdir -p rootfs/modules
 	cp module/hello.ko $@
 
