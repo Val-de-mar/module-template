@@ -1,7 +1,8 @@
 INITRAMFS := initramfs.cpio.gz
 VARS := KBUILD_BUILD_TIMESTAMP='' LLVM=1 CC="ccache clang"
+KERNEL := linux/arch/x86/boot/bzImage
 
-default: linux/.config linux/vmlinux $(INITRAMFS) 
+default: linux/.config $(KERNEL) $(INITRAMFS) 
 
 linux/.config:
 	cd linux && \
@@ -14,7 +15,7 @@ linux/.config:
 	./scripts/config --enable CONFIG_DEVTMPFS && \
 	$(MAKE) $(VARS) olddefconfig
 
-linux/vmlinux:
+$(KERNEL):
 	$(MAKE) $(VARS) -C linux
 
 module/hello.ko:
@@ -34,7 +35,7 @@ $(INITRAMFS): $(ROOTFS_MODULE)
 	cd rootfs && find . | cpio -o -H newc | gzip > $(INITRAMFS_ABS)
 
 clean:
-	$(MAKE) $(VARS) -C linux clean
-	$(MAKE) $(VARS) -C module clean
-	rm $(INITRAMFS)
-	rm $(ROOTFS_MODULE)
+	$(MAKE) $(VARS) -C linux clean || true
+	$(MAKE) $(VARS) -C module clean || true
+	rm $(INITRAMFS) || true
+	rm $(ROOTFS_MODULE) || true
