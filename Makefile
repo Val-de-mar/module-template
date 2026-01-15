@@ -5,7 +5,7 @@ default: linux/.config linux/vmlinux $(INITRAMFS)
 
 linux/.config:
 	cd linux && \
-	$(MAKE) $(VARS) tinyconfig && \
+	$(MAKE) $(VARS) kvm_guest.config && \
 	./scripts/config --enable CONFIG_MODULES && \
 	./scripts/config --enable CONFIG_MODULE_UNLOAD && \
 	./scripts/config --enable CONFIG_BLOCK && \
@@ -24,6 +24,7 @@ module/hello.ko:
 ROOTFS_MODULE := rootfs/modules/hello.ko
 
 $(ROOTFS_MODULE): module/hello.ko
+	mkdir -p rootfs/modules
 	cp module/hello.ko $@
 
 INITRAMFS_ABS := $(abspath $(INITRAMFS))
