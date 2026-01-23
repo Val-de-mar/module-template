@@ -1,16 +1,16 @@
 #include <linux/init.h>
 #include <linux/module.h>
 
-static char * aboba(void) {
-  return "aboba";
-}
+extern void logy(void);
 
 static int __init init_hello(void) {
- printk(KERN_INFO "Hello, %s\n", aboba());
+ printk(KERN_INFO "Hi!\n");
+ logy();
  return 0;
 }
 static void __exit exit_hello(void) {
- printk(KERN_INFO "Buy, %s\n", aboba());
+ printk(KERN_INFO "Bye!\n");
+ logy();
 }
 module_init(init_hello);
 module_exit(exit_hello);

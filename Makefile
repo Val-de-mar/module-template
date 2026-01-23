@@ -42,8 +42,10 @@ $(INITRAMFS): $(ROOTFS_MODULE)
 	mkdir -p rootfs/bin rootfs/dev rootfs/etc rootfs/proc rootfs/sys
 	cd rootfs && find . | cpio -o -H newc | gzip > $(INITRAMFS_ABS)
 
-clean:
-	$(MAKE) $(VARS) -C linux clean || true
+clean_not_linux:
 	$(MAKE) $(VARS) -C module clean || true
 	rm $(INITRAMFS) || true
 	rm $(ROOTFS_MODULE) || true
+
+clean: clean_not_linux
+	$(MAKE) $(VARS) -C linux clean || true
